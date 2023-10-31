@@ -1,0 +1,74 @@
+
+
+#include <mega32.h>
+#include <delay.h>
+// Alphanumeric LCD functions
+#include <alcd.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+// Declare your global variables here
+
+void main(void)
+{
+char str[17] = "Reza";
+
+int i,j,k;
+
+DDRA=0x00;
+PORTA=0x00;
+DDRB=0x00;
+PORTB=0x00;
+DDRC=0x00;
+PORTC=0x00;
+DDRD=0x00;
+PORTD=0x00;
+
+
+lcd_init(16*2);
+
+while (1)
+      {
+        for(j = 0; j < 4; j++){
+            for(i = 15; i >= j ; i--){
+                if(j % 2 == 0){
+                    if(i % 2 == 0){
+                        lcd_gotoxy(i,0);
+                        lcd_putchar(str[j]);
+                    
+                    }else{
+                        lcd_gotoxy(i,1);
+                        lcd_putchar(str[j]);
+                    }
+                }else{
+                    if(i % 2 == 0){
+                        lcd_gotoxy(i,1);
+                        lcd_putchar(str[j]);
+                    
+                    }else{
+                        lcd_gotoxy(i,0);
+                        lcd_putchar(str[j]);
+                    }    
+                }
+                
+                if(j != 0){
+                    for(k = 0; k < j; k++){
+                        lcd_gotoxy(k,0);
+                        lcd_putchar(str[k]);    
+                    }
+                    
+                        
+                }
+                delay_ms(300);
+                lcd_clear();
+            }           
+        }
+        
+        for(i = 0; i <= 16; i++){
+            lcd_clear();
+            lcd_gotoxy(i,0);
+            lcd_putsf("Reza");
+            delay_ms(500);
+        } 
+      }
+}

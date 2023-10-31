@@ -1,0 +1,74 @@
+#include <mega32.h>
+#include <delay.h>
+// Alphanumeric LCD functions
+#include <alcd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#define START PINA.0
+#define STOP PINA.1
+
+// Declare your global variables here
+
+void main(void)
+{
+char h=0,m=0,s=0,ms =0;
+char str[32];
+
+int flag = 0;
+
+DDRA=0x07;
+PORTA=0x07;
+DDRB=0x00;
+PORTB=0x00;
+DDRC=0x00;
+PORTC=0x00;
+DDRD=0x00;
+PORTD=0x00;
+
+
+lcd_init(16*2);
+lcd_gotoxy(4,0);
+lcd_putsf("00:00:00");
+lcd_gotoxy(6,1);
+lcd_putsf("START");
+
+
+while (1)
+      {
+        if(START == 0){
+            lcd_clear();
+            flag = 1;
+            while(flag == 1){
+                ms++;
+                if(ms>99){
+                    ms = 0;
+                    s++;
+                    if(s > 59){
+                        s = 0;
+                        m++;
+                        if(m > 59){
+                            h++;
+                        }
+                    }    
+                }
+                lcd_gotoxy(3,0);
+                sprintf(str, "%02u:%02u:%02u.%02u", h,m,s,ms);
+                lcd_puts(str);
+                lcd_gotoxy(6,1);
+                lcd_putsf("STOP");
+                if(STOP == 0){
+                    flag = 0;
+                    ms = s = m = h = 0;
+                    sprintf(str, "%02u:%02u:%02u.%02u", h,m,s,ms);
+                    lcd_gotoxy(6,1);
+                    lcd_putsf("START");  
+                }    
+            }
+        }
+       
+        
+        
+        
+      }
+      
+}
